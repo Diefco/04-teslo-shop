@@ -50,6 +50,7 @@ export class Product {
 
   @OneToMany(() => ProductImage, (productImage) => productImage.product, {
     cascade: true,
+    eager: true, // Nos ayuda a cargar la relación con lass imágenes de los productos de manera automática
   })
   images?: ProductImage[];
 
