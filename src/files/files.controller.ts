@@ -13,10 +13,14 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { fileFilter, fileNamer } from './helpers';
 import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(
+    private readonly filesService: FilesService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get('product/:imageName')
   findProductImage(
@@ -45,7 +49,7 @@ export class FilesController {
     }
 
     // const secureUrl = `${file.filename}`;
-    const secureUrl = `http://localhost:3000/api/files/product/4c029dd8-54d1-4526-bee3-46a11dbc6aee.jpeg`;
+    const secureUrl = `${this.configService.get('HOST_API')}/files/product/${file.filename}`;
 
     return { secureUrl };
   }
