@@ -5,6 +5,12 @@
 
 postgres/
 
+# images in public
+/public/products/*.jpg
+/public/products/*.png
+/public/products/*.gif
+/public/products/*.svg
+
 # Logs
 logs
 *.log
