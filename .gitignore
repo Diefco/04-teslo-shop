@@ -11,6 +11,12 @@ postgres/
 /public/products/*.gif
 /public/products/*.svg
 
+# images in static
+/static/products/*.jpg
+/static/products/*.png
+/static/products/*.gif
+/static/products/*.svg
+
 # Logs
 logs
 *.log
