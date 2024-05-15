@@ -30,7 +30,7 @@ export class AuthService {
       await this.userRepository.save(user);
 
       delete user.password;
-      // TODO: Retornar el JWT de acceso
+      // TODO: Retornar el JWT
 
       return user;
     } catch (error) {
