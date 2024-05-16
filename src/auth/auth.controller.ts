@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { createUserDto, LoginUserDto } from './dto/';
 import { AuthGuard } from '@nestjs/passport';
@@ -19,10 +19,12 @@ export class AuthController {
 
   @Get('private')
   @UseGuards(AuthGuard()) // This will protect the route with the JWT strategy.
-  testingPrivateRoute() {
+  testingPrivateRoute(@Req() request: Express.Request) {
+    console.log({ user: request.user });
     return {
       ok: true,
       message: 'This is a private route',
+      user: { name: 'Diego' },
     };
   }
 }
