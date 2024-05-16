@@ -8,7 +8,9 @@ export class User {
   @Column('text', { unique: true })
   email: string;
 
-  @Column('text')
+  @Column('text', {
+    select: false, // This will prevent the password from being returned in the query results.
+  })
   password: string;
 
   @Column('text')
