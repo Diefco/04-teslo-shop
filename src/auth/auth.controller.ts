@@ -12,8 +12,10 @@ import { AuthService } from './auth.service';
 import { createUserDto, LoginUserDto } from './dto/';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from './entities/user.entity';
-import { GetUser, rawHeaders } from './decorators/';
+import { Auth, GetUser, rawHeaders } from './decorators/';
 import { UserRoleGuard } from './guards/user-role/user-role.guard';
+import { RoleProtected } from './decorators';
+import { ValidRoles } from './interfaces';
 
 @Controller('auth')
 export class AuthController {
@@ -50,10 +52,21 @@ export class AuthController {
     };
   }
 
+  // @SetMetadata('roles', ['admin', 'super-user'])
   @Get('private2')
-  @SetMetadata('roles', ['admin', 'super-user'])
+  @RoleProtected(ValidRoles.superUser, ValidRoles.admin)
   @UseGuards(AuthGuard(), UserRoleGuard)
   privateRoute2(@GetUser() user: User) {
+    return {
+      ok: true,
+      message: 'This is a private route 2',
+      user,
+    };
+  }
+
+  @Get('private3')
+  @Auth(ValidRoles.admin, ValidRoles.superUser)
+  privateRoute3(@GetUser() user: User) {
     return {
       ok: true,
       message: 'This is a private route 2',
