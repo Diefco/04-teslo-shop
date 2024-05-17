@@ -34,17 +34,35 @@ export class ProductsController {
     type: Product,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  @ApiResponse({ status: 403, description: 'Forbidden. Token related.' })
+  @ApiResponse({
+    status: 401,
+    description: 'Unathorized, provide the user token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden. User without the required permissions',
+  })
   create(@Body() createProductDto: CreateProductDto, @GetUser() user: User) {
     return this.productsService.create(createProductDto, user);
   }
 
   @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'List of all productos with pagination',
+    type: [Product],
+  })
   findAll(@Query() paginationDto: PaginationDto) {
     return this.productsService.findAll(paginationDto);
   }
 
   @Get(':term')
+  @ApiResponse({
+    status: 200,
+    description: 'Product found',
+    type: Product,
+  })
+  @ApiResponse({ status: 404, description: 'Product not found' })
   findOne(
     @Param('term')
     term: string,
@@ -54,6 +72,20 @@ export class ProductsController {
 
   @Patch(':id')
   @Auth(ValidRoles.admin)
+  @ApiResponse({
+    status: 200,
+    description: 'Product was updated',
+    type: Product,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unathorized, provide the user token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden. User without the required permissions',
+  })
+  @ApiResponse({ status: 404, description: 'Product not found' })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateProductDto: UpdateProductDto,
@@ -64,6 +96,19 @@ export class ProductsController {
 
   @Delete(':id')
   @Auth(ValidRoles.admin)
+  @ApiResponse({
+    status: 200,
+    description: 'Product was removed',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unathorized, provide the user token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden. User without the required permissions',
+  })
+  @ApiResponse({ status: 404, description: 'Product not found' })
   remove(
     @Param('id', ParseUUIDPipe)
     id: string,
