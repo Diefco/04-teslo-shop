@@ -55,4 +55,26 @@ export class MessagesWsGateway
       this.messagesWsService.getConnectedClients(),
     );
   }
+
+  @SubscribeMessage('message-from-client')
+  onMessageFromClient(client: Socket, payload: NewMessageDto) {
+    //! Send only to the client that sent the message
+    // client.emit('message-from-server', {
+    //   fullName: 'Me from server',
+    //   message: payload.message || 'no message!!',
+    // });
+    //! Send to everyone, except the client.
+    // client.broadcast.emit('message-from-server', {
+    //   fullName: 'Me from server',
+    //   message: payload.message || 'no message!!',
+    // });
+
+    // this.wss.to(client.id).emit('message-from-server', {...});
+
+    //! Send to everyone, including the client.
+    this.wss.emit('message-from-server', {
+      fullName: this.messagesWsService.getUserFullName(client.id),
+      message: payload.message || 'no message!!',
+    });
+  }
 }
